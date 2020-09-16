@@ -36,4 +36,4 @@ jobs:
           namespace: geerlingguy
           image: "${{ matrix.image }}"
           options: parallel
-          scenario: my_specific_scenario
+          scenario: default
