@@ -1,2 +1,44 @@
 ---
 # tasks file for ansible_role_rstudio_server
+
+- name: Install R using system packages
+  include_tasks: "install_R_using_system_packages_{{ ansible_os_family }}.yml"
+  when: rstudio_server_install_r_using_system_packages
+
+- name: Set rstudio_server_package_url for CentOS 7
+  set_fact:
+    rstudio_server_package_url: "https://download2.rstudio.org/server/centos6/x86_64/rstudio-server-rhel-{{ rstudio_server_version }}-x86_64.rpm"
+  when:
+    - ansible_os_family == "RedHat"
+    - ansible_distribution_major_version == "7"
+    - rstudio_server_package_url is not defined
+
+- name: Set rstudio_server_package_url for CentOS 8
+  set_fact:
+    rstudio_package_url: "https://download2.rstudio.org/server/centos8/x86_64/rstudio-server-rhel-{{ rstudio_server_version }}-x86_64.rpm"
+  when:
+    - ansible_os_family == "RedHat"
+    - ansible_distribution_major_version == "8"
+    - rstudio_server_package_url is not defined
+
+- name: Install the Rstudio server package
+  package:
+    name: "{{ rstudio_server_package_url }}"
+    state: installed
+
+- name: Verify rstudio service is enabled
+  service:
+    name: rstudio-server
+    enabled: yes
+    state: started
+
+- name: Install BiocManager. We will use it to install R packages from CRAN or BioConductor
+  shell: Rscript -e "install.packages('BiocManager', repos='http://cloud.r-project.org', dependencies = TRUE); BiocManager::install()"
+  args:
+    creates: "/usr/lib64/R/library/BiocManager"
+
+- name: Install extra R packages
+  shell: Rscript -e "install.packages('BiocManager', repos='http://cloud.r-project.org', dependencies = TRUE); BiocManager::install(c('{{ item }}'))"
+  args:
+    creates: "/usr/lib64/R/library/{{ item }}"
+  loop: "{{ rstudio_server_extra_r_packages }}"

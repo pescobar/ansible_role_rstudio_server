@@ -1,0 +1,43 @@
+---
+
+- name: install epel repository to install R
+  yum:
+    name: epel-release
+    state: installed
+
+- name: install the 'Development tools' package group
+  yum:
+    name: "@Development tools"
+    state: present
+
+- name: Install latest R and some extra libraries to build R packages
+  yum:
+    name:
+      - R
+      - R-devel
+      - R-java
+      - readline-devel
+      - readline-static
+      - ncurses-devel
+      - ncurses-static
+      - libpng-devel
+      - libpng-static
+      - libjpeg-turbo-devel
+      - libjpeg-turbo-static
+      - libtiff-devel
+      - libtiff-static
+      - tcl-devel
+      - tk-devel
+      - zlib-devel
+      - zlib-static
+      - bzip2-devel
+      - libcurl-devel
+      - curl
+      - libxml2-devel
+      - xz-devel
+      - cairo-devel
+      - mpfr-devel
+      - gdal-devel
+      - vim
+      - htop
+    state: installed
