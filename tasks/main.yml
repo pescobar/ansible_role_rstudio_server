@@ -38,7 +38,7 @@
     creates: "/usr/lib64/R/library/BiocManager"
 
 - name: Install extra R packages
-  shell: Rscript -e "install.packages('BiocManager', repos='http://cloud.r-project.org', dependencies = TRUE); BiocManager::install(c('{{ item }}'))"
+  shell: Rscript -e "BiocManager::install(c('{{ item }}'))"
   args:
     creates: "/usr/lib64/R/library/{{ item }}"
   loop: "{{ rstudio_server_extra_r_packages }}"
