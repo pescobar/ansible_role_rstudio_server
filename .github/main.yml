@@ -1,0 +1,39 @@
+---
+name: CI
+
+on:
+  - push
+
+jobs:
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+        with:
+          path: "${{ github.repository }}"
+      - name: molecule
+        uses: robertdebock/molecule-action@2.6.2
+        with:
+          command: lint
+  test:
+    needs:
+      - lint
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        image:
+          - docker-centos7-ansible
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+        with:
+          path: "${{ github.repository }}"
+      - name: molecule
+        uses: robertdebock/molecule-action@2.6.2
+        with:
+          namespace: geerlingguy
+          image: "${{ matrix.image }}"
+          options: parallel
+          scenario: my_specific_scenario
