@@ -34,11 +34,11 @@
 
 - name: Install BiocManager. We will use it to install R packages from CRAN or BioConductor
   shell: Rscript -e "install.packages('BiocManager', repos='http://cloud.r-project.org', dependencies = TRUE); BiocManager::install()"
-  args:
+  args:  # noqa 305
     creates: "/usr/lib64/R/library/BiocManager"
 
 - name: Install extra R packages
   shell: Rscript -e "BiocManager::install(c('{{ item }}'))"
-  args:
+  args:  # noqa 305
     creates: "/usr/lib64/R/library/{{ item }}"
   loop: "{{ rstudio_server_extra_r_packages }}"
