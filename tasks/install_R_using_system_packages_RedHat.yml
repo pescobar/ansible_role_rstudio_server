@@ -1,21 +1,26 @@
 ---
 
-- name: install epel repository to install R
+- name: Install R lang RPM from Rstudio repos
   yum:
-    name: epel-release
+    name: "https://cdn.rstudio.com/r/centos-{{ ansible_distribution_major_version }}/pkgs/R-{{ rstudio_server_r_version }}-1-1.x86_64.rpm"
     state: installed
+
+- name: Symlink R executable to /usr/local/bin
+  file:
+    src: "/opt/R/{{ rstudio_server_r_version }}/bin/R"
+    dest: /usr/local/bin/R
+    owner: root
+    group: root
+    state: link
 
 - name: install the 'Development tools' package group
   yum:
     name: "@Development tools"
     state: present
 
-- name: Install latest R and some extra libraries to build R packages
+- name: Install some extra libraries to build R packages
   yum:
     name:
-      - R
-      - R-devel
-      - R-java
       - readline-devel
       - readline-static
       - ncurses-devel
@@ -38,6 +43,4 @@
       - cairo-devel
       - mpfr-devel
       - gdal-devel
-      - vim
-      - htop
     state: installed
