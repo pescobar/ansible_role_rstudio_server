@@ -10,13 +10,16 @@
     name: "https://cdn.rstudio.com/r/centos-{{ ansible_distribution_major_version }}/pkgs/R-{{ rstudio_server_r_version }}-1-1.x86_64.rpm"
     state: installed
 
-- name: Symlink R executable to /usr/local/bin
+- name: Symlink R and Rscript executables to /usr/local/bin
   file:
-    src: "/opt/R/{{ rstudio_server_r_version }}/bin/R"
-    dest: /usr/local/bin/R
+    src: "/opt/R/{{ rstudio_server_r_version }}/bin/{{ item }}"
+    dest: "/usr/local/bin/{{ item }}"
     owner: root
     group: root
     state: link
+  loop:
+    - "R"
+    - "Rscript"
 
 - name: install the 'Development tools' package group
   yum:
