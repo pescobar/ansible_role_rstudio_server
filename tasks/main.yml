@@ -9,8 +9,8 @@
   set_fact:
     rstudio_server_package_url: "https://download2.rstudio.org/server/centos{{ ansible_distribution_major_version }}/x86_64/rstudio-server-rhel-{{ rstudio_server_version }}-x86_64.rpm"
   when:
-   - ansible_os_family == "RedHat"
-   - rstudio_server_package_url is not defined
+    - ansible_os_family == "RedHat"
+    - rstudio_server_package_url is not defined
 
 - name: Install the Rstudio server package
   package:
