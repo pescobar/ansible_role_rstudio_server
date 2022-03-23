@@ -6,6 +6,7 @@ rstudio_server_r_version: 4.1.3
 
 # https://rstudio.com/products/rstudio/download-server/
 rstudio_server_version: "1.4.1717"
+rstudio_server_package_url: "https://download2.rstudio.org/server/centos{{ ansible_distribution_major_version }}/x86_64/rstudio-server-rhel-{{ rstudio_server_version }}-x86_64.rpm"
 
 rstudio_server_extra_r_packages:
   - cluster

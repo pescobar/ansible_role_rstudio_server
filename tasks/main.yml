@@ -5,22 +5,6 @@
   include_tasks: "install_R_using_system_packages_{{ ansible_os_family }}.yml"
   when: rstudio_server_install_r_using_system_packages
 
-- name: Set rstudio_server_package_url for CentOS 7
-  set_fact:
-    rstudio_server_package_url: "https://download2.rstudio.org/server/centos7/x86_64/rstudio-server-rhel-{{ rstudio_server_version }}-x86_64.rpm"
-  when:
-    - ansible_os_family == "RedHat"
-    - ansible_distribution_major_version == "7"
-    - rstudio_server_package_url is not defined
-
-- name: Set rstudio_server_package_url for CentOS 8
-  set_fact:
-    rstudio_package_url: "https://download2.rstudio.org/server/centos8/x86_64/rstudio-server-rhel-{{ rstudio_server_version }}-x86_64.rpm"
-  when:
-    - ansible_os_family == "RedHat"
-    - ansible_distribution_major_version == "8"
-    - rstudio_server_package_url is not defined
-
 - name: Install the Rstudio server package
   package:
     name: "{{ rstudio_server_package_url }}"
